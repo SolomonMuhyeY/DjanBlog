@@ -2,10 +2,11 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-
+from taggit.managers import TaggableManager
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
+        # Return a new QuerySet object. Subclasses can override this method to customize the behavior of the Manager.
         return (
             super().get_queryset().filter(status=Post.Status.PUBLISHED)
         )
@@ -37,7 +38,8 @@ class Post(models.Model):
 
     objects = models.Manager()  # The default manager.
     published = PublishedManager()  # Our custom manager.
-
+# Taggit
+    tags = TaggableManager()
     class Meta:
         ordering = ['-publish']
         indexes = [
